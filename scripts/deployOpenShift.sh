@@ -478,7 +478,7 @@ openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 openshift_disable_check=memory_availability,disk_availability
 openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_hostname=metrics.$MASTERPUBLICIPHOSTNAME
+openshift_metrics_hawkular_hostname=metrics.$ROUTING
 openshift_hosted_logging_deploy=true
 
 # Enable HTPasswdPasswordIdentityProvider for username / password authentication for OpenShift Cluster
