@@ -480,7 +480,7 @@ openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_hostname=metrics.$ROUTING
 openshift_hosted_logging_deploy=true
-openshift_docker_options="-log-driver fluentd"
+# openshift_docker_options="-log-driver fluentd"
 
 # Enable HTPasswdPasswordIdentityProvider for username / password authentication for OpenShift Cluster
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -564,7 +564,7 @@ openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_hostname=metrics.$ROUTING
 openshift_hosted_logging_deploy=true
-openshift_docker_options="-log-driver fluentd"
+# openshift_docker_options="-log-driver fluentd"
 
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
