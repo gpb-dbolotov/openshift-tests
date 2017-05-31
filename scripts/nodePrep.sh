@@ -41,5 +41,8 @@ fi
 systemctl enable docker
 systemctl start docker
 
+sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
+setenforce Permissive
+
 echo $(date) " - Script Complete"
 

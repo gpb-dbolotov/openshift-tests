@@ -78,6 +78,9 @@ yum -y --enablerepo=epel install java-1.8.0-openjdk-headless
 
 npm install -g azure-cli
 
+sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
+setenforce Permissive
+
 fi
 
 echo $(date) " - Script Complete"

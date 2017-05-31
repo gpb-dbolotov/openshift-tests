@@ -472,7 +472,7 @@ openshift_router_selector='type=infra'
 openshift_registry_selector='type=infra'
 
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
+openshift_master_cluster_public_hostname=$ROUTING
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 openshift_disable_check=memory_availability,disk_availability
@@ -481,6 +481,9 @@ openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_hostname=metrics.$ROUTING
 openshift_hosted_logging_deploy=true
 # openshift_docker_options="-log-driver fluentd"
+openshift_use_openshift_sdn=false
+openshift_use_flannel=true
+flannel_interface=eth0
 
 # Enable HTPasswdPasswordIdentityProvider for username / password authentication for OpenShift Cluster
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -556,7 +559,7 @@ openshift_registry_selector='type=infra'
 
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
+openshift_master_cluster_public_hostname=$ROUTING
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 openshift_disable_check=memory_availability,disk_availability
@@ -565,6 +568,9 @@ openshift_metrics_start_cluster=true
 openshift_metrics_hawkular_hostname=metrics.$ROUTING
 openshift_hosted_logging_deploy=true
 # openshift_docker_options="-log-driver fluentd"
+openshift_use_openshift_sdn=false
+openshift_use_flannel=true
+flannel_interface=eth0
 
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
