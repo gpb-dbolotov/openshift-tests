@@ -664,7 +664,7 @@ echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
-runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+# runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files
