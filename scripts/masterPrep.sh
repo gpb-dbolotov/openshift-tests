@@ -73,6 +73,8 @@ EOF
 echo $(date) " - Installing Azure CLI"
 
 yum -y --enablerepo=epel install nodejs
+yum -y --enablerepo=epel install python-passlib
+yum -y --enablerepo=epel install java-1.8.0-openjdk-headless
 
 npm install -g azure-cli
 
