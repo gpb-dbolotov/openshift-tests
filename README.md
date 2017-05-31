@@ -1,0 +1,1 @@
+# OpenShift Origin Deployment Template
