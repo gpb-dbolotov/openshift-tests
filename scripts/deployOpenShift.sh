@@ -667,14 +667,20 @@ echo $(date) "- Configuring Docker Registry to use Azure Storage Account"
 runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
 
 echo $(date) "- Sleep for 120"
-
 sleep 120
 
 # Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
+
+echo $(date) "- Sleep for 120"
+sleep 120
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
+
+echo $(date) "- Sleep for 120"
+sleep 120
+
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 # runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
