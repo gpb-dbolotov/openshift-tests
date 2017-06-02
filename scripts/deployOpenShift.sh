@@ -109,6 +109,22 @@ cat > /home/${SUDOUSER}/assignclusteradminrights.yml <<EOF
     shell: oadm policy add-cluster-role-to-user cluster-admin $SUDOUSER --config=/etc/origin/master/admin.kubeconfig
 EOF
 
+# Run on all nodes - Set Root password on all nodes
+
+cat > /home/${SUDOUSER}/assignrootpassword.yml <<EOF
+---
+- hosts: nodes
+  gather_facts: no
+  remote_user: ${SUDOUSER}
+  become: yes
+  become_method: sudo
+  vars:
+    description: "Set password for Cockpit"
+  tasks:
+  - name: configure Cockpit password
+    shell: echo "${PASSWORD}"|passwd root --stdin
+EOF
+
 # Run on MASTER-0 - configure registry to use Azure Storage
 
 cat > /home/${SUDOUSER}/dockerregistry.yml <<EOF
@@ -455,14 +471,14 @@ ansible_ssh_user=$SUDOUSER
 ansible_become=yes
 openshift_install_examples=true
 deployment_type=origin
-#openshift_release=v1.5.0
+#openshift_release=v1.5
 #openshift_image_tag=v1.5.0
 docker_udev_workaround=True
-openshift_use_dnsmasq=false
+#openshift_use_dnsmasq=false
 openshift_master_default_subdomain=$ROUTING
 openshift_override_hostname_check=true
-osm_use_cockpit=false
-#os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+osm_use_cockpit=true
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
@@ -471,16 +487,25 @@ osm_default_node_selector='type=app'
 openshift_router_selector='type=infra'
 openshift_registry_selector='type=infra'
 
+openshift_master_cluster_method=native
 openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$ROUTING
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 openshift_disable_check=memory_availability,disk_availability
+
+# Setup metrics
 openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_hostname=metrics.$ROUTING
+openshift_metrics_hawkular_hostname=https://metrics.$ROUTING/hawkular/metrics
+
+# Setup logging
 openshift_hosted_logging_deploy=true
+openshift_hosted_logging_storage_kind=dynamic
+openshift_master_logging_public_url=https://kibana.$ROUTING
 # openshift_docker_options="-log-driver fluentd"
+
+# Setup flannel
 # openshift_use_openshift_sdn=false
 # openshift_use_flannel=true
 # flannel_interface=eth0
@@ -547,11 +572,11 @@ deployment_type=origin
 #openshift_release=v1.5
 #openshift_image_tag=v1.5.0
 docker_udev_workaround=True
-openshift_use_dnsmasq=false
+#openshift_use_dnsmasq=false
 openshift_master_default_subdomain=$ROUTING
 openshift_override_hostname_check=true
-osm_use_cockpit=false
-#os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+osm_use_cockpit=true
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
@@ -566,11 +591,19 @@ openshift_master_cluster_public_hostname=$ROUTING
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 openshift_disable_check=memory_availability,disk_availability
+
+# Setup metrics
 openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_hostname=metrics.$ROUTING
+openshift_metrics_hawkular_hostname=https://metrics.$ROUTING/hawkular/metrics
+
+# Setup logging
 openshift_hosted_logging_deploy=true
+openshift_hosted_logging_storage_kind=dynamic
+openshift_master_logging_public_url=https://kibana.$ROUTING
 # openshift_docker_options="-log-driver fluentd"
+
+# Setup flannel
 # openshift_use_openshift_sdn=false
 # openshift_use_flannel=true
 # flannel_interface=eth0
@@ -672,6 +705,11 @@ sleep 120
 
 # Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
+
+# Setting password for root if Cockpit is enabled
+echo $(date) "- Assigning password for root, which is used to login to Cockpit"
+
+runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
 
 # runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
 # runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
