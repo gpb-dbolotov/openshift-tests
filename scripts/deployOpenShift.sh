@@ -497,13 +497,13 @@ openshift_disable_check=memory_availability,disk_availability
 # Setup metrics
 openshift_hosted_metrics_deploy=true
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_hostname=https://hawkular-metrics.$ROUTING/hawkular/metrics
+openshift_metrics_hawkular_hostname=metrics.$ROUTING/hawkular/metrics
 
 # Setup logging
 openshift_hosted_logging_deploy=true
 openshift_master_logging_public_url=https://$ROUTING
 openshift_logging_use_ops=true
-openshift_logging_kibana_hostname=https://kibana.$ROUTING
+openshift_logging_kibana_hostname=kibana.$ROUTING
 # openshift_docker_options="-log-driver fluentd"
 
 # Setup flannel
