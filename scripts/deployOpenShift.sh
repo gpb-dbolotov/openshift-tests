@@ -501,7 +501,9 @@ openshift_metrics_hawkular_hostname=https://hawkular-metrics.$ROUTING/hawkular/m
 
 # Setup logging
 openshift_hosted_logging_deploy=true
-openshift_master_logging_public_url=https://kibana.$ROUTING
+openshift_master_logging_public_url=https://$ROUTING
+openshift_logging_use_ops=true
+openshift_logging_kibana_hostname=https://kibana.$ROUTING
 # openshift_docker_options="-log-driver fluentd"
 
 # Setup flannel
