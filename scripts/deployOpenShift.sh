@@ -479,7 +479,7 @@ openshift_master_default_subdomain=$ROUTING
 openshift_override_hostname_check=true
 osm_use_cockpit=true
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
-console_port=443
+#console_port=443
 openshift_cloudprovider_kind=azure
 osm_default_node_selector='type=app'
 
@@ -495,12 +495,12 @@ openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 openshift_disable_check=memory_availability,disk_availability
 
 # Setup metrics
-openshift_hosted_metrics_deploy=true
+openshift_hosted_metrics_deploy=false
+openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
 openshift_metrics_start_cluster=true
-openshift_metrics_hawkular_hostname=metrics.$ROUTING/hawkular/metrics
 
 # Setup logging
-openshift_hosted_logging_deploy=true
+openshift_hosted_logging_deploy=false
 openshift_master_logging_public_url=https://$ROUTING
 openshift_logging_use_ops=true
 openshift_logging_kibana_hostname=kibana.$ROUTING
@@ -720,13 +720,13 @@ runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
 echo $(date) "- Deleting post installation files"
 
 
-rm /home/${SUDOUSER}/addocpuser.yml
-rm /home/${SUDOUSER}/assignclusteradminrights.yml
-rm /home/${SUDOUSER}/dockerregistry.yml
-rm /home/${SUDOUSER}/vars.yml
-rm /home/${SUDOUSER}/setup-azure-master.yml
-rm /home/${SUDOUSER}/setup-azure-node-master.yml
-rm /home/${SUDOUSER}/setup-azure-node.yml
-rm /home/${SUDOUSER}/deletestucknodes.yml
+# rm /home/${SUDOUSER}/addocpuser.yml
+# rm /home/${SUDOUSER}/assignclusteradminrights.yml
+# rm /home/${SUDOUSER}/dockerregistry.yml
+# rm /home/${SUDOUSER}/vars.yml
+# rm /home/${SUDOUSER}/setup-azure-master.yml
+# rm /home/${SUDOUSER}/setup-azure-node-master.yml
+# rm /home/${SUDOUSER}/setup-azure-node.yml
+# rm /home/${SUDOUSER}/deletestucknodes.yml
 
 echo $(date) " - Script complete"
