@@ -692,7 +692,7 @@ runuser -l $SUDOUSER -c "ansible-playbook ~/assignclusteradminrights.yml"
 # Create Storage Class
 echo $(date) "- Creating Storage Class"
 
-# runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
 
 # Configure Docker Registry to use Azure Storage Account
 echo $(date) "- Configuring Docker Registry to use Azure Storage Account"
@@ -711,9 +711,9 @@ echo $(date) "- Assigning password for root, which is used to login to Cockpit"
 
 runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
 
-# runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
-# runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
-# runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 # runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files

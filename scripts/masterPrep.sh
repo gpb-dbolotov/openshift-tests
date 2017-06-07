@@ -75,7 +75,7 @@ echo $(date) " - Installing Azure CLI"
 yum -y --enablerepo=epel install nodejs
 yum -y --enablerepo=epel install python-passlib
 yum -y --enablerepo=epel install java-1.8.0-openjdk-headless
-iptables -I INPUT -p tcp --dport 9090 -m state --state NEW -j ACCEPT
+# iptables -I INPUT -p tcp --dport 9090 -m state --state NEW -j ACCEPT
 
 npm install -g azure-cli
 
