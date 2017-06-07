@@ -492,12 +492,16 @@ openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$ROUTING
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
+# Enable HTPasswdPasswordIdentityProvider
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+
 openshift_disable_check=memory_availability,disk_availability
 
 # Setup metrics
-openshift_hosted_metrics_deploy=false
+openshift_hosted_metrics_deploy=true
+openshift_metrics_cassandra_storage_type=dynamic
 openshift_hosted_metrics_public_url=https://metrics.$ROUTING/hawkular/metrics
-openshift_metrics_start_cluster=true
 
 # Setup logging
 openshift_hosted_logging_deploy=true
@@ -680,6 +684,16 @@ echo $(date) "- Re-enabling requiretty"
 
 sed -i -e "s/# Defaults    requiretty/Defaults    requiretty/" /etc/sudoers
 
+cd /root
+mkdir .kube
+runuser -l ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}-0:~/.kube/config /tmp/kube-config"
+cp /tmp/kube-config /root/.kube/config
+mkdir /home/${SUDOUSER}/.kube
+cp /tmp/kube-config /home/${SUDOUSER}/.kube/config
+chown --recursive ${SUDOUSER} /home/${SUDOUSER}/.kube
+rm -f /tmp/kube-config
+yum -y install atomic-openshift-clients 
+
 # Adding user to OpenShift authentication file
 echo $(date) "- Adding OpenShift user"
 
@@ -690,6 +704,11 @@ echo $(date) "- Assigning cluster admin rights to user"
 
 runuser -l $SUDOUSER -c "ansible-playbook ~/assignclusteradminrights.yml"
 
+# Setting password for root if Cockpit is enabled
+echo $(date) "- Assigning password for root, which is used to login to Cockpit"
+
+runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"	
+
 # Create Storage Class
 echo $(date) "- Creating Storage Class"
 
@@ -698,7 +717,7 @@ runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
 # Configure Docker Registry to use Azure Storage Account
 echo $(date) "- Configuring Docker Registry to use Azure Storage Account"
 
-# runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
 
 echo $(date) "- Sleep for 120"
 
@@ -707,15 +726,10 @@ sleep 120
 # Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
-# Setting password for root if Cockpit is enabled
-echo $(date) "- Assigning password for root, which is used to login to Cockpit"
-
-runuser -l $SUDOUSER -c "ansible-playbook ~/assignrootpassword.yml"
-
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
-# runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files
 echo $(date) "- Deleting post installation files"
